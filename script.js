@@ -3,7 +3,6 @@ let currency_ticker;
 function get_currencies(){
     let testObj = {1: "BTC", 2: "USD", 3: "XRP", 4: "LINK", 5: "LTC", 6: "USDC", 7: "BCH", 8: "ETH", 9: "ZEC", 10: "BAT", 11: "XLM"};
 
-    /**
     let url = 'https://accessgate-test.netlify.app/.netlify/functions/currencies';
     fetch(url) 
     .then(response => response.text())
@@ -13,7 +12,6 @@ function get_currencies(){
             console.log(key + ":" + result[key]);
         }
     })
-     */
 }
 
 function open_ticker(){
