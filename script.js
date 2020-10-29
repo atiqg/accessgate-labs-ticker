@@ -3,28 +3,27 @@ let currency_ticker;
 //BOOLEAN: IS TABLE ALREADY DRAWN ON SCREEN
 let isTableCreated=false;
 
-function get_currencies(){
-    document.querySelector('#loadingSvg').style.display = 'block';
-    
-    let testObj = {"1":"LTCBTC","2":"LTCUSDC","3":"ETHUSDC","4":"BATETH","5":"ZECBTC","6":"XRPBTC","7":"BCHETH","8":"BCHUSDC","9":"XRPETH","10":"ZECUSDC","11":"BATBTC","12":"ETHBTC","13":"LTCETH","14":"XRPUSDC","15":"ZECUSD","16":"BTCUSD","17":"BCHBTC","18":"LINKUSDC","19":"ETHUSD","20":"ZECETH","21":"LTCUSD","22":"XLMUSDC","23":"LINKETH","24":"USDCUSD","25":"LINKBTC","26":"BTCUSDC","27":"XLMBTC","28":"XRPUSD","29":"BATUSDC"};
+//START POINT OF SCRIPT WHEN PAGE LOAD
+//FETCH ALL AVAILABLE EXCHANGE TYPE ON THE API
+get_currencies();
 
-    /**
+/**
+ * FUNCTION TO FETCH ALL AVAILABLE CRYPTO EXCHANGE TYPES
+ * (THIS FUNCTION WAS CREATED BECAUSE CORS POLICY BLOCK REQUEST
+ * AND HERE WE ARE USING PROXY SERVER, netlify!! )
+ */
+function get_currencies(){
+    document.querySelector('#loadingSvg').style.display = 'block'; 
     let url = 'https://accessgate-test.netlify.app/.netlify/functions/symbols';
     fetch(url) 
     .then(response => response.text())
     .then(result => {
-        result = JSON.parse(result);
-        show_symbol_options(result);
+        result = JSON.parse(result);//parse result
+        show_symbol_options(result);//show all available exchange types
         console.log(result);
     })
-    */
-
-   show_symbol_options(testObj);
-
-   return testObj;
 }
 
-get_currencies();
 
 
 /**
@@ -210,7 +209,7 @@ for (var i = 0; i < options.length; i++) {
         console.log(JSON.stringify(current));
         //REMOVE ACTIVE CLASS FORM PREVIOUS ELEMENT
         current[0].className = current[0].className.replace(" active", "");
-        
+
         this.className += " active";//ADD ACTIVE CLASS TO CLICKED ELEMENT
         isTableCreated = false;//CREATE NEW DATA TABLE
     });
