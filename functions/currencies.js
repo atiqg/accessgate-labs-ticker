@@ -34,7 +34,7 @@ exports.handler = async event => {
     let currencies = {};
 
     for (var i = 0; i < result.length; i++) {
-      currencies[i].fullName = result[i].id;
+      currencies[result[i].fullName] = result[i].id;
     }
 
     console.log(JSON.stringify(currencies));
