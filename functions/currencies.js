@@ -34,11 +34,11 @@ exports.handler = async event => {
     let currencies = {};
 
     for (var i = 0; i < result.length; i++) {
-      currencies[i+1] = result[i].fullName;
+      currencies[i+1] = result[i].id;
     }
 
     console.log(JSON.stringify(currencies));
-    
+
     return {
       statusCode: 200,
       body: `${currencies}`,
