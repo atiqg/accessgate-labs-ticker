@@ -9,28 +9,18 @@
   <body id="body">
     <header class="header">
     </header>
-    <div class="mainContainer">
-      <p id="price">currency</p>
-      <button onclick="open_ticker()">fetch</button>
-
-      <button onclick="close_ticker()">close</button>
-      <button onclick="get_currencies()">currencies</button>
-    </div>
+    <h1><div id="symbolBox"></div></h1>
+    
+      <table class="dataTable" id="dataTable">
+      <thead>
+        <tr>
+          <th><h1>data</h1></th>
+          <th><h1>value</h1></th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
     <script src="script.js"></script>
   </body>
 </html>
-
-<!--
-jsonrpc: "2.0"
-method: "ticker"
-params:
-  ask: "0.029438"
-  bid: "0.029418"
-  high: "0.029534"
-  last: "0.029415"
-  low: "0.028862"
-  open: "0.029017"
-  symbol: "ETHBTC"
-  timestamp: "2020-10-29T08:42:05.253Z"
-  volume: "135.216"
--->

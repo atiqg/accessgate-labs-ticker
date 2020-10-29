@@ -4,3 +4,161 @@
     padding: 0;
     box-sizing: border-box;
 }
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+ 
+ body {
+   font-family: 'Open Sans', sans-serif;
+   font-weight: 300;
+   line-height: 1.42em;
+   color:d8b26e;
+   background-color:#1F2739;
+ }
+ 
+ #symbol{
+  position: relative;
+ }
+
+#symbol select {
+  display: none; /*hide original SELECT element:*/
+}
+
+ 
+ h1 {
+   font-size:3em; 
+   font-weight: 300;
+   line-height:1em;
+   text-align: center;
+ }
+ 
+ h2 {
+   font-size:1em; 
+   font-weight: 300;
+   text-align: center;
+   display: block;
+   line-height:1em;
+   padding-bottom: 2em;
+ }
+ 
+ h2 a {
+   font-weight: 700;
+   text-transform: uppercase;
+   text-decoration: none;
+ }
+ 
+ .dataTable th h1 {
+       font-weight: bold;
+       font-size: 1em;
+   text-align: left;
+   color: #185875;
+ }
+ 
+ .dataTable td {
+       font-weight: normal;
+       font-size: 1em;
+   -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+        -moz-box-shadow: 0 2px 2px -2px #0E1119;
+             box-shadow: 0 2px 2px -2px #0E1119;
+ }
+ 
+ .dataTable {
+       text-align: left;
+       overflow: hidden;
+       width: 80%;
+       margin: 0 auto;
+   display: table;
+   padding: 0 0 8em 0;
+ }
+ 
+ .dataTable td, .dataTable th {
+   padding-bottom: 2%;
+   padding-top: 2%;
+   padding-left:2%;  
+ }
+ 
+ /* Background-color of the odd rows */
+ .dataTable tr:nth-child(odd) {
+       background-color: #323C50;
+ }
+ 
+ .dataTable tr:nth-child(even) {
+       background-color: #2C3446;
+ }
+ 
+ .dataTable th {
+       background-color: #1F2739;
+ }
+
+
+.dataTable td:first-child{
+  color: #C74350;
+}
+
+.dataTable td { 
+  color: #A7A1AB;
+  font-size: 20px;
+  font-weight: bold;
+}
+ 
+ .dataTable tr:hover {
+    background-color: #464A52;
+ -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+        -moz-box-shadow: 0 6px 6px -6px #0E1119;
+             box-shadow: 0 6px 6px -6px #0E1119;
+ }
+ 
+ .dataTable td:hover {
+   background-color: #d8b26e;
+   color: #403E10;
+   font-weight: bold;
+  
+   transform: translate3d(6px, -6px, 0);
+   
+   transition-delay: 0s;
+   transition-duration: 0.4s;
+   transition-property: all;
+   transition-timing-function: line;
+ }
+ 
+
+ .exp {
+  background-color: #8d232e;
+  color: #403E10;
+  font-weight: bold;
+  
+  
+  transform: translate3d(3px, -3px, 0);
+  
+  transition-delay: 0s;
+  transition-duration: 0.03s;
+  transition-property: all;
+  transition-timing-function: line;
+}
+
+ @media (max-width: 800px) {
+ .dataTable td:nth-child(4),
+ .dataTable th:nth-child(4) { display: none; }
+ #symbol{ margin: 2% 0% 3% 0%; }
+
+ }
+
+
+#symbol{
+  margin: 2% 10% 3% 10%;
+}
+
+
+.option {
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  background-color: #1F2739;
+  color: #1b3c4b;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Style the active class, and buttons on mouse-over */
+.active, .option:hover {
+  background-color: #A7A1AB;
+  color: #0E1119;
+}

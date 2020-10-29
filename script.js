@@ -1,20 +1,27 @@
 let currency_ticker;
+let isTableCreated=false;
 
 function get_currencies(){
-    let testObj = {"US Dollar":"USD","Bitcoin Cash":"BCH","Ripple":"XRP","Chainlink":"LINK","Litecoin":"LTC","USD Coin":"USDC","Ethereum":"ETH","Bitcoin":"BTC","Zcash":"ZEC","Stellar":"XLM","Basic Attention Token":"BAT"};
 
     let url = 'https://accessgate-test.netlify.app/.netlify/functions/symbols';
     fetch(url) 
     .then(response => response.text())
     .then(result => {
         result = JSON.parse(result);
-        for (var key in result) {
-            console.log(key + ":" + result[key]);
-        }
+        show_symbol_options(result);
+        console.log(result);
     })
+
+   
 }
 
-function open_ticker(){
+get_currencies();
+
+function open_ticker(symbol){
+
+    if(currency_ticker){
+        currency_ticker.close();
+    }
 
     //initialize websocket
     const url = 'wss://api.crosstower.com/api/2/ws';
@@ -24,7 +31,7 @@ function open_ticker(){
         currency_ticker.send(JSON.stringify({
             "method": "subscribeTicker",
             "params": {
-              "symbol": "BTCUSD"
+              "symbol": symbol
             },
             "id": 123
           }));
@@ -32,7 +39,18 @@ function open_ticker(){
 
     currency_ticker.onmessage = (e) => {
         let message = JSON.parse(e.data);
-        console.log(message);
+        if(!message.result){
+            if(!isTableCreated){
+                create_ticker_table(message.params);
+                isTableCreated = true;
+                console.log('first');
+            }else{
+                console.log('Second: yes', message.params.symbol);
+                update_table_data(message.params);
+            }
+        }else{
+            console.log("Ticker Started");
+        }
     }
     
     currency_ticker.onerror = (error) => {
@@ -45,28 +63,115 @@ function open_ticker(){
     };
 }
 
-
-
-function close_ticker(){
-    if(currency_ticker){
-        currency_ticker.close();
-    }
-}
-
 window.onbeforeunload = function() {
     if(currency_ticker){
         currency_ticker.close();
     }
 };
 
+function create_ticker_table(data){
 
-function httpGetAsync(url, callback)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
+  let table = document.querySelector('#dataTable');
+  document.querySelector('#dataTable').innerHTML = '<thead>' +
+'<tr>'+
+'<th><h1>data</h1></th>'+
+'<th><h1>value</h1></th>'+
+'</tr>'+
+'</thead>' +
+'<tbody id="tbody">'+
+'</tbody>';
+
+    let tr, td1, td2, node1, node2;
+    for (var key in data) {
+        tr = document.createElement('tr');   
+        td1 = document.createElement('td');
+        td2 = document.createElement('td');
+        
+        node1 = document.createTextNode(key);
+
+        node2 = document.createTextNode(data[key]);
+        td2.id = key;
+        
+        td1.appendChild(node1);
+        td2.appendChild(node2);
+        
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        
+        table.appendChild(tr);
     }
-    xmlHttp.open("GET", url, true);
-    xmlHttp.send(null);
+
+  
+}
+
+let ifColored=false;
+function change_color(element){
+    if(!ifColored){
+        ifColored = true;
+        let tempColor;
+        tempColor = element.className;
+        element.className += " exp";
+        sleep(60).then(() => {
+            element.className = tempColor;
+            ifColored = false;
+        })
+    }
+}
+
+
+function update_table_data(data){
+    
+    for (key in data) {
+        if(document.querySelector('#' + key).innerHTML != data[key]){
+            change_color(document.querySelector('#' + key));
+            document.querySelector('#' + key).innerHTML = data[key];
+        }
+    }   
+}
+
+
+function show_symbol_options(data){
+    let btn, text, symbol = document.querySelector('#symbolBox');
+    let selectedSymbol;
+
+    for (var key in data) {
+        btn = document.createElement('BUTTON');
+        btn.className = "option";
+        btn.setAttribute("onclick", 'open_ticker("'+ data[key] +'")');
+
+        text = document.createTextNode(data[key]);
+        btn.appendChild(text);
+
+        if(data[key] == "ETHBTC"){
+            btn.className += " active";
+            selectedSymbol == "ETHBTC";
+        }
+        btn.id = (key);
+        
+        symbol.appendChild(btn);
+    }
+
+    open_ticker("ETHBTC");
+}
+
+
+
+var header = document.getElementById("symbolBox");
+var options = header.getElementsByClassName("option");
+for (var i = 0; i < options.length; i++) {
+    options[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+        isTableCreated = false;
+    });
+}
+
+
+/**
+ * delay execution of statement for some milliseconds
+ * @param {number} milliseconds 
+ */
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
