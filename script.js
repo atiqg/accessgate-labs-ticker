@@ -3,7 +3,10 @@ let currency_ticker;
 function get_currencies(){
     let url = 'https://accessgate-test.netlify.app/.netlify/functions/currencies';
     fetch(url) 
-    .then(response => response.text())
+    .then(response =>{
+        response.text()
+        console.log(JSON.stringify(response.text()));
+    })
     .then(result => {
         result = JSON.parse(result);
         console.log(JSON.stringify(result));
@@ -11,7 +14,6 @@ function get_currencies(){
             console.log(entry.fullName);
         });
     })
-    .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"));
 }
 
 function open_ticker(){
