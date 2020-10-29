@@ -1,4 +1,6 @@
+//WEBSOCKET VARIABLE
 let currency_ticker;
+//BOOLEAN: IS TABLE ALREADY DRAWN ON SCREEN
 let isTableCreated=false;
 
 function get_currencies(){
@@ -16,9 +18,20 @@ function get_currencies(){
 
 get_currencies();
 
+
+/**
+ * FUNCTION TO START TICKER WEBSOCKET AND SHOW DATA TO USER
+ * STEP 1: CHECK IF WEBSOCKET WAS OPENED FOR ANOTHER TYPE
+ * STEP 2: IF SO THEN CLOSE IT AND START A NEW ONE
+ * STEP 3: ONCE WE RECEIVE 2nd TICK THEN CREATE DATA TABLE
+ * STEP 4: FROM THE THIRD TICK USE UPDATE DATA FUNCTION
+ * STEP 5: IF ERROR OR WINDOW DOWN THEN CLOSE WEBSOCKET
+ * @param {STRING } symbol PARTICULAR EXCHANGE TYPE STRING
+ */
 function open_ticker(symbol){
     document.querySelector('#loadingSvg').style.display = 'block';
 
+    //check if web socket is already connected if so, close it
     if(currency_ticker){
         currency_ticker.close();
     }
@@ -40,13 +53,16 @@ function open_ticker(symbol){
     currency_ticker.onmessage = (e) => {
         let message = JSON.parse(e.data);
         if(!message.result){
+            //close loading animation
             document.querySelector('#loadingSvg').style.display = 'none';
-            if(!isTableCreated){
+            
+            if(!isTableCreated){//if table is not created yet then create it
                 create_ticker_table(message.params);
                 isTableCreated = true;
-                console.log('first');
+                console.log('Data Table Created');
             }else{
-                console.log('Second: yes', message.params.symbol);
+                //if table is crated then update data
+                console.log('Update Data: ', message.params.symbol);
                 update_table_data(message.params);
             }
         }else{
@@ -54,25 +70,41 @@ function open_ticker(symbol){
         }
     }
     
+    //on error
     currency_ticker.onerror = (error) => {
         console.log(`WebSocket error: ${error}`);
         currency_ticker.close();
     }
 
+    //on close
     currency_ticker.onclose = function () {
         console.log('websocket is closed');
     };
 }
 
+//IF USER CLOSE OR REFRESH WINDOW THEN DISCONNECT WEBSOCKET
 window.onbeforeunload = function() {
     if(currency_ticker){
         currency_ticker.close();
     }
 };
 
+
+/**
+ * FUNCTION TO CREATE DATA TABLE FOR THE FIRST TIME
+ * THIS FUNCTION CREATE TABLE DYNAMICALLY AND ASSIGN
+ * EACH ENTRY AN id OF DATA TYPE WHICH CAN BE USED
+ * LATER TO UPDATE DATA
+ * STEP 1: REMOVE ANY PREVIOUS DATA TABLE
+ * STEP 2: CREATE TABLE COMPONENTS
+ * STEP 3: ADD DATA TO COMPONENTS
+ * STEP 4: ADD id TO COMPONENTS
+ * STEP 5: APPEND COMPONENTS TO TABLE
+ * @param {object} data EXCHANGE PRICE DATA 
+ */
 function create_ticker_table(data){
 
-
+  //remove any previously drawn table
   let table = document.querySelector('#dataTable');
   document.querySelector('#dataTable').innerHTML = '<thead>' +
 '<tr>'+
@@ -89,11 +121,13 @@ function create_ticker_table(data){
         td1 = document.createElement('td');
         td2 = document.createElement('td');
         
+        //add data to components
         node1 = document.createTextNode(key);
-
         node2 = document.createTextNode(data[key]);
-        td2.id = key;
+        //add same data as id of component
+        td2.id = key;//this id will be used to update data later 
         
+        //append components
         td1.appendChild(node1);
         td2.appendChild(node2);
         
@@ -105,66 +139,70 @@ function create_ticker_table(data){
   
 }
 
-let ifColored=false;
-function change_color(element){
-    if(!ifColored){
-        ifColored = true;
-        let tempColor;
-        tempColor = element.className;
-        element.className += " exp";
-        sleep(60).then(() => {
-            element.className = tempColor;
-            ifColored = false;
-        })
-    }
-}
 
 
+/**
+ * FUNCTION TO DYNAMICALLY UPDATE EACH ROW DATA
+ * DATA KEY WAS ASSIGNED AS ID OF THE ROW SO,
+ * WE CAN USE IT TO UPDATE
+ * @param {object} data NEW TICK DATA
+ */
 function update_table_data(data){
-    
     for (key in data) {
-        if(document.querySelector('#' + key).innerHTML != data[key]){
-            change_color(document.querySelector('#' + key));
-            document.querySelector('#' + key).innerHTML = data[key];
-        }
+        document.querySelector('#' + key).innerHTML = data[key];
     }   
 }
 
 
+/**
+ * FUNCTION TO SHOW ALL THE EXCHANGE PRICE TYPES
+ * STEP 1: CREATE A NEW BUTTON AND ASSIGN ONCLICK FUNCTION
+ * STEP 2: PASS RESPECTIVE DATA KEY IN THE ONCLICK FUNCTION
+ * STEP 3: IF "ETHBTC" IS FOUND THEN MAKE IT DEFAULT
+ * STEP 4: APPEND BUTTON TO HTML PAGE
+ * STEP 5: OPEN SOCKET FOR "ETHBTC" FOR DEFAULT DATA
+ * @param {object} data EXCHANGE TYPES
+ */
 function show_symbol_options(data){
     let btn, text, symbol = document.querySelector('#symbolBox');
     let selectedSymbol;
 
     for (var key in data) {
-        btn = document.createElement('BUTTON');
-        btn.className = "option";
+        btn = document.createElement('BUTTON');//create a new button
+        btn.className = "option";//add options class to button
+        //add open websocket function with respective key value
         btn.setAttribute("onclick", 'open_ticker("'+ data[key] +'")');
 
-        text = document.createTextNode(data[key]);
+        text = document.createTextNode(data[key]);//innerHtml text
         btn.appendChild(text);
 
+        //set default button
         if(data[key] == "ETHBTC"){
             btn.className += " active";
             selectedSymbol == "ETHBTC";
         }
         btn.id = (key);
-        
+        //append button
         symbol.appendChild(btn);
     }
 
+    //open default websocket
     open_ticker("ETHBTC");
 }
 
 
-
+//GET EXCHANGE TYPES BOX
 var header = document.getElementById("symbolBox");
+//GET OPTION CALL ELEMENT
 var options = header.getElementsByClassName("option");
+//LOOP OVER ALL THE OPTIONS AVAILABLE
 for (var i = 0; i < options.length; i++) {
-    options[i].addEventListener("click", function() {
+    options[i].addEventListener("click", function() {//IF ANY ONE OPTION IS CLICKED
         var current = document.getElementsByClassName("active");
+        //REMOVE ACTIVE CLASS FORM PREVIOUS ELEMENT
         current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-        isTableCreated = false;
+        this.className += " active";//ADD ACTIVE CLASS TO CLICKED ELEMENT
+        isTableCreated = false;//CREATE NEW DATA TABLE
     });
 }
 

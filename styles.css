@@ -97,11 +97,12 @@
 
 .dataTable td:first-child{
   color: #C74350;
+  font-size: 20px;
 }
 
 .dataTable td { 
   color: #A7A1AB;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
 }
  
@@ -130,7 +131,7 @@
   background-color: #8d232e;
   color: #403E10;
   font-weight: bold;
-  
+  color: #3d9b19;
   
   transform: translate3d(3px, -3px, 0);
   
@@ -167,4 +168,17 @@
 .active, .option:hover {
   background-color: #A7A1AB;
   color: #0E1119;
+}
+
+
+
+
+@media(max-width:500px) {
+  
+  #loadingSvg{
+    display: none;
+    position: fixed;
+    top: 27%;
+    left: 10%;
+  }
 }
