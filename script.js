@@ -2,6 +2,7 @@ let currency_ticker;
 let isTableCreated=false;
 
 function get_currencies(){
+    document.querySelector('#loadingSvg').style.display = 'block';
 
     let url = 'https://accessgate-test.netlify.app/.netlify/functions/symbols';
     fetch(url) 
@@ -11,13 +12,12 @@ function get_currencies(){
         show_symbol_options(result);
         console.log(result);
     })
-
-   
 }
 
 get_currencies();
 
 function open_ticker(symbol){
+    document.querySelector('#loadingSvg').style.display = 'block';
 
     if(currency_ticker){
         currency_ticker.close();
@@ -40,6 +40,7 @@ function open_ticker(symbol){
     currency_ticker.onmessage = (e) => {
         let message = JSON.parse(e.data);
         if(!message.result){
+            document.querySelector('#loadingSvg').style.display = 'none';
             if(!isTableCreated){
                 create_ticker_table(message.params);
                 isTableCreated = true;
@@ -71,6 +72,7 @@ window.onbeforeunload = function() {
 
 function create_ticker_table(data){
 
+
   let table = document.querySelector('#dataTable');
   document.querySelector('#dataTable').innerHTML = '<thead>' +
 '<tr>'+
@@ -100,7 +102,6 @@ function create_ticker_table(data){
         
         table.appendChild(tr);
     }
-
   
 }
 
