@@ -30,7 +30,6 @@ async function test() {
 //END POINT FUNCTION
 exports.handler = async event => {
     let result = await test();
-    result = result.price;
     return {
       statusCode: 200,
       body: `${result}`,
