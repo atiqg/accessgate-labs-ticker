@@ -5,8 +5,8 @@ function get_currencies(){
     fetch(url) 
     .then(response => response.text())
     .then(result => {
-        result = JSON.stringify(result);
-        console.log(result);
+        result = JSON.parse(result);
+        console.log(JSON.parse(result));
         result.forEach(function(entry) {
             console.log(entry.fullName);
         });
