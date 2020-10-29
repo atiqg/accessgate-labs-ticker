@@ -1,9 +1,9 @@
 let currency_ticker;
 
 function get_currencies(){
-    let testObj = {1: "BTC", 2: "USD", 3: "XRP", 4: "LINK", 5: "LTC", 6: "USDC", 7: "BCH", 8: "ETH", 9: "ZEC", 10: "BAT", 11: "XLM"};
+    let testObj = {"US Dollar":"USD","Bitcoin Cash":"BCH","Ripple":"XRP","Chainlink":"LINK","Litecoin":"LTC","USD Coin":"USDC","Ethereum":"ETH","Bitcoin":"BTC","Zcash":"ZEC","Stellar":"XLM","Basic Attention Token":"BAT"};
 
-    let url = 'https://accessgate-test.netlify.app/.netlify/functions/currencies';
+    let url = 'https://accessgate-test.netlify.app/.netlify/functions/symbols';
     fetch(url) 
     .then(response => response.text())
     .then(result => {
@@ -24,7 +24,7 @@ function open_ticker(){
         currency_ticker.send(JSON.stringify({
             "method": "subscribeTicker",
             "params": {
-              "symbol": "ETHBTC"
+              "symbol": "BTCUSD"
             },
             "id": 123
           }));

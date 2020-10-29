@@ -14,7 +14,7 @@ async function test() {
   const options = {
     hostname: 'api.crosstower.com',
     port: 443,
-    path: '/api/2/public/currency',
+    path: '/api/2/public/symbol',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ exports.handler = async event => {
     let currencies = {};
 
     for (var i = 0; i < result.length; i++) {
-      currencies[result[i].fullName] = result[i].id;
+      currencies[i+1] = result[i].id;
     }
 
     console.log(JSON.stringify(currencies));
