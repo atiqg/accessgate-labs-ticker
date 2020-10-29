@@ -18,7 +18,7 @@ async function test() {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'accessgate-test.netlify.app',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
     }
@@ -30,6 +30,7 @@ async function test() {
 //END POINT FUNCTION
 exports.handler = async event => {
     let result = await test();
+    console.log(JSON.stringify(result));
     return {
       statusCode: 200,
       body: `${result}`,

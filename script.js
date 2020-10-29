@@ -6,7 +6,7 @@ function get_currencies(){
     .then(response => response.text())
     .then(result => {
         result = JSON.parse(result);
-        console.log(JSON.parse(result));
+        console.log(JSON.stringify(result));
         result.forEach(function(entry) {
             console.log(entry.fullName);
         });
