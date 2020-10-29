@@ -30,10 +30,18 @@ async function test() {
 //END POINT FUNCTION
 exports.handler = async event => {
     let result = await test();
-    console.log(JSON.stringify(result));
+
+    let currencies = {};
+
+    for (var i = 0; i < result.length; i++) {
+      currencies[i+1] = result[i].fullName;
+    }
+
+    console.log(JSON.stringify(currencies));
+    
     return {
       statusCode: 200,
-      body: `${result}`,
+      body: `${currencies}`,
     }
 }
 

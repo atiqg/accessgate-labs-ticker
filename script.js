@@ -3,12 +3,8 @@ let currency_ticker;
 function get_currencies(){
     let url = 'https://accessgate-test.netlify.app/.netlify/functions/currencies';
     fetch(url) 
-    .then(response =>{
-        response.text()
-        console.log(JSON.stringify(response.text()));
-    })
+    .then(response => response.text())
     .then(result => {
-        result = JSON.parse(result);
         console.log(JSON.stringify(result));
         result.forEach(function(entry) {
             console.log(entry.fullName);
