@@ -5,11 +5,11 @@ function get_currencies(){
     fetch(url) 
     .then(response => response.text())
     .then(result => {
+        result = JSON.stringify(result);
         for (var key in result) {
             console.log(key + ":" + result[key]);
         }
-        console.log(JSON.stringify(result));
-        console.log(JSON.parse(result));
+        console.log(result);
     })
 }
 
